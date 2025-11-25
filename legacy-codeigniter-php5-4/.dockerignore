@@ -1,0 +1,12 @@
+.git
+.gitignore
+.idea
+*.md
+.env.example
+.DS_Store
+Thumbs.db
+node_modules
+vendor
+composer.lock
+*.log
+docker-compose.override.yml.example

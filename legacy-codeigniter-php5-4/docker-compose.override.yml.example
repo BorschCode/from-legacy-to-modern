@@ -1,0 +1,25 @@
+version: '3.8'
+
+# Docker Compose Override Example
+# Copy this file to docker-compose.override.yml to customize your configuration
+# cp docker-compose.override.yml.example docker-compose.override.yml
+
+services:
+  web:
+    ports:
+      - "8036:80"  # Custom web port
+    environment:
+      - CI_ENV=development
+
+  db:
+    ports:
+      - "3389:3306"  # Custom database port
+    environment:
+      MYSQL_ROOT_PASSWORD: your_custom_root_password
+      MYSQL_DATABASE: your_custom_database
+      MYSQL_USER: your_custom_user
+      MYSQL_PASSWORD: your_custom_password
+
+  phpmyadmin:
+    ports:
+      - "8037:80"  # Custom PhpMyAdmin port
