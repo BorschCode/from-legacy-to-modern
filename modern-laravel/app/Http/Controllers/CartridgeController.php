@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCartridgeRequest;
 use App\Models\Cartridge;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -29,35 +30,14 @@ class CartridgeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCartridgeRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'owner' => 'required|string|max:50',
-            'brand' => 'required|string|max:50',
-            'marks' => 'required|string|max:50',
-            'code' => 'required|string|max:30',
-            'servicename' => 'nullable|string|max:30',
-            'technical_life' => 'required|integer|in:0,1',
-            'comments' => 'nullable|string|max:50',
-            'weight_before' => 'required|integer|min:0',
-            'weight_after' => 'required|integer|min:0',
-            'date_outcome' => 'nullable|date',
-            'date_income' => 'nullable|date',
-        ]);
-
-        // Auto-calculate service status
-        $validated['inservice'] = 0;
-        if (isset($validated['date_outcome']) && isset($validated['date_income'])) {
-            $validated['inservice'] = $validated['date_income'] < $validated['date_outcome'] ? 1 : 0;
-        }
-
-        Cartridge::create($validated);
+        Cartridge::create($request->validated());
 
         return redirect()
             ->route('cartridges.index')
             ->with('success', 'Cartridge data has been added to the database');
     }
-
     /**
      * Display the specified resource.
      */

@@ -46,6 +46,22 @@ Tracks all changes to cartridges:
 - `date_of_changes` - When the change occurred
 - `created_at`, `updated_at` - Laravel timestamps
 
+## Screenshots
+
+### Main Dashboard
+![Main Dashboard](./readme/index.png)
+
+### Edit Cartridge
+![Edit Cartridge](./readme/edit.png)
+
+### Change History
+![Change History](./readme/history.png)
+
+### Delete Confirmation
+![Delete Confirmation](./readme/deleted.png)
+
+
+
 ## Installation
 
 ### Prerequisites
@@ -361,18 +377,6 @@ sudo chmod -R 775 storage bootstrap/cache
 ```bash
 composer dump-autoload
 ```
-
-## Future Enhancements
-
-- [ ] User authentication and authorization
-- [ ] Role-based access control
-- [ ] Export to Excel/PDF
-- [ ] Advanced search and filtering
-- [ ] Email notifications
-- [ ] API endpoints for external integration
-- [ ] Multi-language support
-- [ ] Bulk operations
-- [ ] Dashboard with statistics
 
 ## License
 

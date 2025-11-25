@@ -1,0 +1,30 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "a7b381de52495d876727c448416498a4",
+    "packages": [
+        {
+            "name": "codeigniter/framework",
+            "version": "3.1.13",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/bcit-ci/CodeIgniter/archive/refs/tags/3.1.13.zip"
+            },
+            "type": "library"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.6.0"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
+}

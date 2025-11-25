@@ -6,6 +6,45 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property string $owner Location or owner according to inventory records
+ * @property string $brand Manufacturer of the cartridge
+ * @property string $marks Model of the cartridge assigned by the manufacturer
+ * @property int $weight_before Weight before sending to the service center
+ * @property int $weight_after Weight after refilling
+ * @property \Illuminate\Support\Carbon|null $date_outcome Date sent to the service center
+ * @property \Illuminate\Support\Carbon|null $date_income Date received from the service center
+ * @property string|null $servicename Service center performing repair/refill
+ * @property string|null $comments Comments describing the cartridge status
+ * @property int $technical_life Cartridge condition: in use (1) or decommissioned (0)
+ * @property string $code Unique cartridge code or inventory number
+ * @property int $inservice Service status: 1 - in service, 0 - not in service (auto-calculated)
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read int $weight_difference
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartridgeHistory> $histories
+ * @property-read int|null $histories_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereBrand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereDateIncome($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereDateOutcome($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereInservice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereMarks($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereOwner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereServicename($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereTechnicalLife($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereWeightAfter($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereWeightBefore($value)
+ * @mixin \Eloquent
+ */
 class Cartridge extends Model
 {
     use HasFactory;
