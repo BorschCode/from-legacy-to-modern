@@ -21,6 +21,14 @@ This project documents the migration of a legacy CodeIgniter 3 (PHP 5.4) applica
 
 ---
 
+## UI Comparison (Legacy vs Modern)
+
+| Legacy (CodeIgniter + Bootstrap)                             | Modern (Laravel + Tailwind)                  |
+|--------------------------------------------------------------|----------------------------------------------|
+| ![Legacy](./legacy-codeigniter-php5-4/readme/index-page.png) | ![Modern](./modern-laravel/readme/index.png) |
+
+
+
 ## Example: Legacy → Modern Migration (Controller Method)
 
 Below is a practical example of how a legacy CodeIgniter 3 controller method is transformed into a clean and modern Laravel 12 controller method.
