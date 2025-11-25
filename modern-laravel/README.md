@@ -1,59 +1,390 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Modern Cartridge Management System - Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern Laravel-based CRUD admin panel for managing cartridge equipment accounting, migrated from the legacy CodeIgniter PHP 5.4 system.
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is a complete rewrite of the legacy cartridge accounting system using modern Laravel framework. The system manages cartridge inventory with full CRUD operations, change history tracking, and a clean Bootstrap 5 interface.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Core Functionality
+- ✅ **CRUD Operations**: Create, Read, Update, Delete cartridges
+- ✅ **Change History Tracking**: Automatic logging of all changes
+- ✅ **Auto-calculated Fields**: Service status and weight differences
+- ✅ **DataTables Integration**: Sortable, searchable tables
+- ✅ **Responsive Design**: Bootstrap 5 UI works on all devices
+- ✅ **Form Validation**: Server-side validation with Laravel
+- ✅ **Flash Messages**: User feedback for all operations
 
-## Learning Laravel
+### Database Tables
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+#### Cartridges Table
+Main table storing cartridge information:
+- `id` - Unique identifier
+- `owner` - Department/owner location
+- `brand` - Cartridge manufacturer
+- `marks` - Model designation
+- `code` - Unique inventory code
+- `servicename` - Service center name
+- `technical_life` - Operational status (1=working, 0=out of service)
+- `comments` - Additional notes
+- `weight_before` - Weight before service (grams)
+- `weight_after` - Weight after refill (grams)
+- `date_outcome` - Date sent to service
+- `date_income` - Date returned from service
+- `inservice` - Auto-calculated (1=currently in service, 0=not in service)
+- `created_at`, `updated_at` - Laravel timestamps
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Cartridge Histories Table
+Tracks all changes to cartridges:
+- `id` - Unique identifier
+- `cartridge_id` - Foreign key to cartridges table
+- `owner`, `weight_before`, `weight_after`, etc. - Snapshot of data
+- `log` - Short change summary
+- `log_full` - Detailed change log
+- `date_of_changes` - When the change occurred
+- `created_at`, `updated_at` - Laravel timestamps
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Prerequisites
+- PHP 8.1+
+- Composer
+- MySQL 5.7+ or MariaDB
+- Node.js & NPM (for frontend assets)
 
-### Premium Partners
+### Step 1: Clone and Install Dependencies
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+cd modern-laravel
 
-## Contributing
+# Install PHP dependencies
+composer install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Install Node dependencies
+npm install
+```
 
-## Code of Conduct
+### Step 2: Environment Configuration
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Copy environment file
+cp .env.example .env
 
-## Security Vulnerabilities
+# Generate application key
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Step 3: Configure Database
+
+Edit `.env` file with your database credentials:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=cartridge
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+### Step 4: Run Migrations
+
+```bash
+# Run migrations to create tables
+php artisan migrate
+```
+
+### Step 5: Build Frontend Assets
+
+```bash
+# Build assets
+npm run build
+
+# Or for development with hot reload
+npm run dev
+```
+
+### Step 6: Start Development Server
+
+```bash
+php artisan serve
+```
+
+Visit http://localhost:8000 in your browser.
+
+## Project Structure
+
+```
+modern-laravel/
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   │       └── CartridgeController.php   # Main CRUD controller
+│   └── Models/
+│       ├── Cartridge.php                 # Cartridge model with history tracking
+│       └── CartridgeHistory.php          # History model
+├── database/
+│   └── migrations/
+│       ├── 2024_01_01_000001_create_cartridges_table.php
+│       └── 2024_01_01_000002_create_cartridge_histories_table.php
+├── resources/
+│   └── views/
+│       ├── layouts/
+│       │   └── app.blade.php             # Main layout with Bootstrap 5
+│       └── cartridges/
+│           ├── index.blade.php           # List all cartridges (DataTables)
+│           ├── create.blade.php          # Add new cartridge form
+│           ├── edit.blade.php            # Edit cartridge form
+│           └── history.blade.php         # View change history
+└── routes/
+    └── web.php                           # Route definitions
+```
+
+## Usage Guide
+
+### Viewing All Cartridges
+
+Navigate to `/cartridges` or the homepage. You'll see:
+- Sortable and searchable table with all cartridges
+- Color-coded status indicators
+- Auto-calculated weight differences
+- Action buttons (Edit, History, Delete)
+
+### Adding a New Cartridge
+
+1. Click "Add New Cartridge" button
+2. Fill in required fields:
+    - Department/Owner
+    - Brand
+    - Model
+    - Code
+    - Weight before/after
+    - Condition (Working/Out of Service)
+3. Optional fields: Service center, dates, comments
+4. Click "Add Cartridge"
+
+### Editing a Cartridge
+
+1. Click the edit button (yellow) on any cartridge
+2. Modify editable fields (Brand and Model are read-only)
+3. Click "Update Cartridge"
+4. Changes are automatically logged to history
+
+### Viewing History
+
+1. Click the history button (blue) on any cartridge
+2. See all historical changes with:
+    - Change timestamps
+    - What was modified
+    - Full change logs
+    - Previous values
+
+### Deleting a Cartridge
+
+1. Click the delete button (red)
+2. Confirm deletion
+3. Cartridge and all its history are removed
+
+## Features Explanation
+
+### Automatic Change Tracking
+
+The system automatically tracks changes using Laravel's model events:
+
+```php
+// When updating a cartridge
+static::updating(function ($cartridge) {
+    $cartridge->updateServiceStatus();  // Auto-calculate service status
+    $cartridge->logChanges();           // Log changes to history
+});
+```
+
+### Service Status Calculation
+
+The `inservice` field is automatically calculated:
+- `inservice = 1`: If `date_income < date_outcome` (still at service center)
+- `inservice = 0`: Otherwise (returned or never sent)
+
+### Weight Difference
+
+Calculated on-the-fly:
+```php
+$weightDifference = $cartridge->weight_after - $cartridge->weight_before;
+```
+
+## Technologies Used
+
+### Backend
+- **Laravel 11** - PHP framework
+- **MySQL/MariaDB** - Database
+- **Eloquent ORM** - Database abstraction
+
+### Frontend
+- **Bootstrap 5** - UI framework
+- **DataTables** - Enhanced tables
+- **Font Awesome 6** - Icons
+- **jQuery** - DOM manipulation
+
+## Differences from Legacy System
+
+| Feature | Legacy (CodeIgniter) | Modern (Laravel) |
+|---------|---------------------|------------------|
+| PHP Version | 5.3.7+ | 8.1+ |
+| Framework | CodeIgniter 3.x | Laravel 11 |
+| Bootstrap | 4 | 5 |
+| Database | Manual queries | Eloquent ORM |
+| Validation | Manual | Laravel validation |
+| Routing | CodeIgniter routes | Laravel routes |
+| Change Tracking | Manual in controller | Automatic in model |
+| Timestamps | Manual dates | Laravel timestamps |
+| Security | Basic | CSRF, prepared statements, mass assignment protection |
+
+## API Routes
+
+| Method | URI | Action | Route Name |
+|--------|-----|--------|------------|
+| GET | `/cartridges` | List all | `cartridges.index` |
+| GET | `/cartridges/create` | Show create form | `cartridges.create` |
+| POST | `/cartridges` | Store new | `cartridges.store` |
+| GET | `/cartridges/{id}` | Show single | `cartridges.show` |
+| GET | `/cartridges/{id}/edit` | Show edit form | `cartridges.edit` |
+| PUT/PATCH | `/cartridges/{id}` | Update | `cartridges.update` |
+| DELETE | `/cartridges/{id}` | Delete | `cartridges.destroy` |
+| GET | `/cartridges/{id}/history` | Show history | `cartridges.history` |
+
+## Database Schema
+
+### Cartridges Table
+
+```sql
+CREATE TABLE cartridges (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    owner VARCHAR(50) NOT NULL,
+    brand VARCHAR(50) NOT NULL,
+    marks VARCHAR(50) NOT NULL,
+    weight_before INT DEFAULT 0,
+    weight_after INT DEFAULT 0,
+    date_outcome DATE NULL,
+    date_income DATE NULL,
+    servicename VARCHAR(30) NULL,
+    comments VARCHAR(50) NULL,
+    technical_life TINYINT DEFAULT 1,
+    code VARCHAR(30) NOT NULL,
+    inservice TINYINT DEFAULT 0,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+```
+
+### Cartridge Histories Table
+
+```sql
+CREATE TABLE cartridge_histories (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cartridge_id BIGINT UNSIGNED NOT NULL,
+    owner VARCHAR(40) DEFAULT 'Log start',
+    weight_before INT DEFAULT 0,
+    weight_after INT DEFAULT 0,
+    date_outcome DATE NULL,
+    date_income DATE NULL,
+    servicename VARCHAR(50) DEFAULT 'Log start',
+    technical_life TINYINT DEFAULT 1,
+    log TEXT NULL,
+    log_full TEXT NULL,
+    date_of_changes DATE NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (cartridge_id) REFERENCES cartridges(id) ON DELETE CASCADE
+);
+```
+
+## Development
+
+### Running Tests
+
+```bash
+php artisan test
+```
+
+### Clearing Cache
+
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+```
+
+### Database Refresh
+
+```bash
+# WARNING: This will delete all data
+php artisan migrate:fresh
+```
+
+## Production Deployment
+
+1. Set `APP_ENV=production` in `.env`
+2. Set `APP_DEBUG=false` in `.env`
+3. Run optimizations:
+
+```bash
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+npm run build
+```
+
+4. Set proper file permissions:
+
+```bash
+chmod -R 755 storage bootstrap/cache
+```
+
+## Troubleshooting
+
+### Migration Errors
+```bash
+php artisan migrate:rollback
+php artisan migrate
+```
+
+### Permission Issues
+```bash
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+```
+
+### Composer Issues
+```bash
+composer dump-autoload
+```
+
+## Future Enhancements
+
+- [ ] User authentication and authorization
+- [ ] Role-based access control
+- [ ] Export to Excel/PDF
+- [ ] Advanced search and filtering
+- [ ] Email notifications
+- [ ] API endpoints for external integration
+- [ ] Multi-language support
+- [ ] Bulk operations
+- [ ] Dashboard with statistics
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open-source software. Feel free to modify and use.
+
+## Credits
+
+- Migrated from legacy CodeIgniter system
+- Built with Laravel 11
+- UI powered by Bootstrap 5
+- Tables enhanced with DataTables
+
+## Support
+
+For issues or questions, please create an issue in the repository.
