@@ -1,6 +1,6 @@
 # Legacy to Modern Migration Project
 
-This project demonstrates the migration from a legacy CodeIgniter PHP 5.4 application to a modern Laravel 12 dockerized application.
+This project documents the migration of a legacy CodeIgniter 3 (PHP 5.4) application to a modern Laravel 12 application running in a Dockerized environment.
 
 ## Table of Contents
 
@@ -15,210 +15,237 @@ This project demonstrates the migration from a legacy CodeIgniter PHP 5.4 applic
   - [Overview](#overview-1)
   - [Planned Improvements](#planned-improvements)
   - [Docker Setup](#docker-setup)
+  - [Directory Structure](#directory-structure)
+  - [Environment Setup](#environment-setup)
   - [Planned Database Improvements](#planned-database-improvements)
-  - [API Endpoints](#api-endpoints-planned)
+  - [Planned API Endpoints](#planned-api-endpoints)
   - [Migration Strategy](#migration-strategy)
   - [Technology Stack](#technology-stack)
   - [Development Workflow](#development-workflow)
+- [Example: Legacy → Modern Migration](#example-legacy--modern-migration-controller-method)
+
+---
+
+## Example: Legacy → Modern Migration (Controller Method)
+
+Below is a practical example of how a legacy CodeIgniter 3 controller method is transformed into a clean and modern Laravel 12 controller method.
+
+### Legacy CodeIgniter 3 Method (addcartridgedata)
+
+```php
+public function addcartridgedata()
+{
+    $today = getdate();
+    $d = $today['mday'];
+    $m = $today['mon'];
+    $y = $today['year'];
+
+    if ($_POST) {
+        $data = array(
+            'owner'          => $this->input->post('owner'),
+            'brand'          => $this->input->post('brand'),
+            'marks'          => $this->input->post('marks'),
+            'code'           => $this->input->post('code'),
+            'servicename'    => $this->input->post('servicename'),
+            'technical_life' => $this->input->post('technical_life'),
+            'comments'       => $this->input->post('comments'),
+            'weight_before'  => $this->input->post('weight_before'),
+            'weight_after'   => $this->input->post('weight_after'),
+            'date_income'    => date("$y-$m-$d")
+        );
+
+        if ($this->cartridge_model->insertcartridge($data)) {
+            $this->session->set_flashdata(
+                'msg',
+                '<div class="alert alert-success text-center">Данные о картридже добавлены в базу данных</div>'
+            );
+            redirect(base_url().'cartridge/addcartridgedata', 'refresh');
+        } else {
+            $this->session->set_flashdata(
+                'msg',
+                '<div class="alert alert-danger text-center">Чёт пошло не так</div>'
+            );
+            redirect(base_url().'cartridge/addcartridgedata', 'refresh');
+        }
+    } else {
+        $this->load->view('add_cartridge');
+    }
+}
+````
+
+---
+
+### Modern Laravel 12 Equivalent (store)
+
+```php
+public function store(StoreCartridgeRequest $request): RedirectResponse
+{
+    Cartridge::create($request->validated());
+
+    return redirect()
+        ->route('cartridges.index')
+        ->with('success', 'Cartridge data has been added to the database');
+}
+```
+
+---
+
+### Key Improvements in Laravel
+
+| Legacy (CodeIgniter)           | Modern (Laravel 12)                      |
+| ------------------------------ | ---------------------------------------- |
+| Manual `$_POST` handling       | Strong typed validation via Form Request |
+| Manual date construction       | Automatic timestamps or `Carbon::now()`  |
+| Raw SQL model methods          | Eloquent ORM                             |
+| Flash messages stored manually | `with('success', '...')`                 |
+| Hardcoded redirects            | Named routes                             |
+| Manual view loading            | Blade + resource controllers             |
+
+---
 
 ## Legacy System (CodeIgniter 3.x)
 
 ### Overview
-- **Application**: Cartridge Management System (Система учёта картриджей)
-- **Framework**: CodeIgniter 3.x
-- **PHP Version**: 5.3.7+
-- **Database**: MySQL
-- **Language**: Russian interface
-- **Base URL**: `http://cartridge.crud`
 
-### Database Schema
+* **Application**: Cartridge Management System (Система учёта картриджей)
+* **Framework**: CodeIgniter 3.x
+* **PHP Version**: 5.3.7+
+* **Database**: MySQL
+* **Base URL**: `http://cartridge.crud`
 
-#### Main Tables
-1. **`cartridgedb`** - Primary cartridge records
-   ```sql
-   - id (int, auto_increment)
-   - owner (varchar 50) - Department/location
-   - brand (varchar 50) - Manufacturer
-   - marks (varchar 50) - Model designation
-   - weight_before (int) - Weight before service
-   - weight_after (int) - Weight after refill
-   - date_outcome (date) - Service send date
-   - date_income (date) - Service return date
-   - servicename (varchar 30) - Service center
-   - comments (varchar 50) - Status comments
-   - technical_life (tinyint) - Working condition
-   - code (varchar 30) - Unique identifier
-   - inservice (tinyint) - Service status
-   ```
+Additional details:
+`./legacy-codeigniter-php5-4/readme.md`
 
-2. **`story`** - Change history/audit log
-   ```sql
-   - id (int, auto_increment)
-   - id_item (int) - Foreign key to cartridgedb
-   - log (text) - Short change history
-   - log_full (text) - Full change log
-   - date_of_changes (date) - Change timestamp
-   ```
-
-### Application Structure
-```
-legacy-codeigniter-php5-4/
-├── application/
-│   ├── controllers/Cartridge.php
-│   ├── models/cartridge_model.php
-│   ├── views/
-│   │   ├── cartridge_details.php
-│   │   ├── add_cartridge.php
-│   │   ├── edit_details.php
-│   │   └── story_of_element.php
-│   └── config/
-├── assets/ (Bootstrap 4, DataTables)
-├── system/ (CodeIgniter core)
-└── DB/ (SQL dumps)
-```
-
-### Current Features
-- CRUD operations for cartridge management
-- Change history tracking with detailed logs
-- DataTables integration for sorting/filtering
-- Bootstrap 4 responsive UI
-- Russian localization
-- Flash messaging system
-
-### Configuration
-- Database: `localhost/cartridge` (user: webuser)
-- Session storage: File-based
-- No CSRF protection
-- No authentication system
-- Direct SQL queries in model
+---
 
 ### Docker Setup for Legacy
 
-The legacy CodeIgniter application includes a complete Docker setup for development:
-
 **Services:**
-- **Web**: PHP 5.6 + Apache (Port: 8080)
-- **Database**: MySQL 5.7 (Port: 3306)
-- **PhpMyAdmin**: Database management (Port: 8081)
 
-**Quick Start:**
+* **Web**: PHP 5.6 + Apache (8080)
+* **Database**: MySQL 5.7 (3306)
+* **phpMyAdmin**: 8081
+
+**Quick Start**
+
 ```bash
 cd legacy-codeigniter-php5-4
 docker-compose up -d --build
 ```
 
 **Access:**
-- Application: http://localhost:8080
-- PhpMyAdmin: http://localhost:8081
 
-For detailed setup instructions, see: [DOCKER_SETUP.md](legacy-codeigniter-php5-4/DOCKER_SETUP.md)
+* `http://localhost:8080`
+* `http://localhost:8081`
+
+More details:
+`legacy-codeigniter-php5-4/readme/DOCKER_SETUP.md`
 
 ---
 
 ## Modern System (Laravel 12 + Docker)
 
+Detailed description:
+`./modern-laravel/readme.md`
+
 ### Overview
-- **Framework**: Laravel 12
-- **PHP Version**: 8.3+
-- **Database**: MySQL 8.0
-- **Containerization**: Docker & Docker Compose
-- **Architecture**: Modern MVC with API support
 
-### Planned Improvements
+* **Framework**: Laravel 12
+* **PHP Version**: 8.3+
+* **Database**: MySQL 8.0
+* **Server**: Nginx + Docker
+* **Architecture**: Modern MVC / API-first
+* **Dev Environment**: Laravel Sail
 
-#### Security Enhancements
-- CSRF protection enabled
-- Input validation with Form Requests
-- Eloquent ORM (SQL injection prevention)
-- Authentication system (Laravel Sanctum)
-- Rate limiting
+---
 
-#### Modern Architecture
-- Eloquent models with relationships
-- Resource controllers
-- API endpoints (JSON responses)
-- Service layer pattern
-- Repository pattern for data access
+### Docker Setup
 
-#### Development Features
-- Environment-based configuration
-- Database migrations and seeders
-- Automated testing (PHPUnit)
-- Code formatting (Laravel Pint)
-- Queue system for background tasks
-
-#### Docker Setup
-
-The modern Laravel application uses Laravel Sail for Docker development:
-
-**Services:**
-- **Laravel App**: PHP 8.4 + Nginx (Port: 80)
-- **MySQL**: MySQL 8.0 (Port: 3306)
-- **Redis**: For queues and caching
-- **Vite**: For asset compilation (Port: 5173)
-
-**Quick Start:**
 ```bash
 cd modern-laravel
 ./vendor/bin/sail up -d
 ```
 
-**Directory Structure:**
+**Services:** Laravel App, MySQL, Redis, Vite
+
+---
+
+### Directory Structure
+
 ```
 modern-laravel/
-├── compose.yaml           # Laravel Sail configuration
-├── app/                   # Laravel application code
-├── database/              # Migrations and seeders
-├── resources/             # Views, assets, lang files
-├── routes/                # Web and API routes
-├── tests/                 # PHPUnit tests
-└── vendor/                # Composer dependencies
+├── compose.yaml
+├── app/
+├── database/
+├── resources/
+├── routes/
+├── tests/
+└── vendor/
 ```
 
-**Environment Setup:**
-1. Copy `.env.example` to `.env`
-2. Generate application key: `./vendor/bin/sail artisan key:generate`
-3. Run migrations: `./vendor/bin/sail artisan migrate`
-4. Seed database: `./vendor/bin/sail artisan db:seed`
+---
 
-### Planned Database Improvements
-- Proper foreign key constraints
-- Database indexes for performance
-- Soft deletes for audit trail
-- Timestamps (created_at, updated_at)
-- UUID primary keys option
+### Environment Setup
 
-### API Endpoints (Planned)
-```
-GET    /api/cartridges          - List all cartridges
-POST   /api/cartridges          - Create cartridge
-GET    /api/cartridges/{id}     - Show cartridge
-PUT    /api/cartridges/{id}     - Update cartridge
-DELETE /api/cartridges/{id}     - Delete cartridge
-GET    /api/cartridges/{id}/history - Get change history
+```bash
+cp .env.example .env
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan db:seed
 ```
 
-### Migration Strategy
-1. **Database Migration**: Convert existing data to Laravel migrations
-2. **Model Creation**: Eloquent models with relationships
-3. **Controller Refactoring**: Resource controllers with validation
-4. **View Modernization**: Blade templates with modern UI
-5. **API Development**: RESTful API endpoints
-6. **Docker Setup**: Complete containerization
-7. **Testing**: Comprehensive test suite
+---
 
-### Technology Stack
-- **Backend**: Laravel 12, PHP 8.3
-- **Database**: MySQL 8.0
-- **Frontend**: Blade templates, Alpine.js, Tailwind CSS
-- **Containerization**: Docker, Docker Compose
-- **Web Server**: Nginx
-- **Queue**: Redis
-- **Testing**: PHPUnit, Laravel Dusk
+## Planned Database Improvements
 
-### Development Workflow
-- Git version control
-- Feature branch workflow
-- Automated testing pipeline
-- Code quality checks
-- Docker development environment
+* Foreign keys
+* Indexes
+* Soft deletes
+* Timestamps
+* Optional UUIDs
+
+---
+
+## Planned API Endpoints
+
+```
+GET    /api/cartridges
+POST   /api/cartridges
+GET    /api/cartridges/{id}
+PUT    /api/cartridges/{id}
+DELETE /api/cartridges/{id}
+GET    /api/cartridges/{id}/history
+```
+
+---
+
+## Migration Strategy
+
+1. Database migration
+2. Model creation
+3. Controller refactoring
+4. View modernization
+5. API development
+6. Docker setup
+7. Testing
+
+---
+
+## Technology Stack
+
+* Laravel 12 / PHP 8.3
+* MySQL 8
+* Blade + Tailwind
+* Redis
+* Docker (Sail)
+* PHPUnit, Pest, Dusk
+
+---
+
+## Development Workflow
+
+* Git workflow
+* Feature branches
+* Automated tests
+* Code quality tools
+* Dockerized environment

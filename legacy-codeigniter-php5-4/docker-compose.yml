@@ -12,6 +12,7 @@ services:
     environment:
       - CI_ENV=${CI_ENV:-development}
       - APACHE_DOCUMENT_ROOT=/var/www/html
+      - CI_BASE_URL=${CI_BASE_URL:-http://localhost:8080}
       - DB_HOST=db
       - DB_USER=${MYSQL_USER:-webuser}
       - DB_PASS=${MYSQL_PASSWORD:-123}

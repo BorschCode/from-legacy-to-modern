@@ -1,8 +1,9 @@
 <?php  defined('BASEPATH') OR exit('No direct script access allowed');
-/** * Date: 28.09.2017 */
+
 class Cartridge extends CI_controller
 {
     public $data;
+    private $cartridge_model;
 
     function __construct()
     {
