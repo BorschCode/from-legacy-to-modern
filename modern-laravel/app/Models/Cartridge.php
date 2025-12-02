@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int $weight_difference
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartridgeHistory> $histories
  * @property-read int|null $histories_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge query()
@@ -43,6 +44,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereWeightAfter($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Cartridge whereWeightBefore($value)
+ *
  * @mixin \Eloquent
  */
 class Cartridge extends Model
@@ -127,8 +129,8 @@ class Cartridge extends Model
                 'date_income' => $cartridge->date_income,
                 'servicename' => $cartridge->servicename,
                 'technical_life' => $cartridge->technical_life,
-                'log' => 'Cartridge created on ' . now()->format('d.m.Y'),
-                'log_full' => 'Initial record created on ' . now()->format('d.m.Y'),
+                'log' => 'Cartridge created on '.now()->format('d.m.Y'),
+                'log_full' => 'Initial record created on '.now()->format('d.m.Y'),
                 'date_of_changes' => now(),
             ]);
         });

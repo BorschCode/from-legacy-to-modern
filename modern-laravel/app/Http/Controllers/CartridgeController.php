@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCartridgeRequest;
 use App\Models\Cartridge;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class CartridgeController extends Controller
 {
@@ -16,6 +16,7 @@ class CartridgeController extends Controller
     public function index(): View
     {
         $cartridges = Cartridge::latest()->get();
+
         return view('cartridges.index', compact('cartridges'));
     }
 
@@ -38,12 +39,14 @@ class CartridgeController extends Controller
             ->route('cartridges.index')
             ->with('success', 'Cartridge data has been added to the database');
     }
+
     /**
      * Display the specified resource.
      */
     public function show(Cartridge $cartridge): View
     {
         $cartridge->load('histories');
+
         return view('cartridges.show', compact('cartridge'));
     }
 
@@ -103,6 +106,7 @@ class CartridgeController extends Controller
     public function history(Cartridge $cartridge): View
     {
         $cartridge->load('histories');
+
         return view('cartridges.history', compact('cartridge'));
     }
 }
