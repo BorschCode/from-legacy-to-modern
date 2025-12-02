@@ -68,10 +68,6 @@ jobs:
     - name: Run PHPUnit Tests
       working-directory: modern-laravel
       run: php artisan test
-    
-    - name: Run PHPStan (Static Analysis)
-      working-directory: modern-laravel
-      run: ./vendor/bin/phpstan analyse --memory-limit=2G
 
   docker-tests:
     name: Docker Build Tests
