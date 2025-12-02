@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  legacy-tests:
+    name: Legacy CodeIgniter Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP 5.6
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '5.6'
+        extensions: mysqli, gd, zip
+    
+    - name: Validate PHP Syntax
+      run: |
+        find legacy-codeigniter-php5-4/application -name "*.php" -exec php -l {} \;
+    
+    - name: Check CodeIgniter Structure
+      run: |
+        test -f legacy-codeigniter-php5-4/index.php
+        test -d legacy-codeigniter-php5-4/application/controllers
+        test -d legacy-codeigniter-php5-4/application/models
+
+  modern-tests:
+    name: Modern Laravel Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP 8.4
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: pdo, mysql, redis
+    
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: modern-laravel/vendor
+        key: composer-${{ hashFiles('modern-laravel/composer.lock') }}
+    
+    - name: Install dependencies
+      working-directory: modern-laravel
+      run: composer install --no-interaction --prefer-dist
+    
+    - name: Copy environment file
+      working-directory: modern-laravel
+      run: cp .env.example .env
+    
+    - name: Generate application key
+      working-directory: modern-laravel
+      run: php artisan key:generate
+    
+    - name: Run Laravel Pint (Code Style)
+      working-directory: modern-laravel
+      run: ./vendor/bin/pint --test
+    
+    - name: Run PHPUnit Tests
+      working-directory: modern-laravel
+      run: php artisan test
+    
+    - name: Run PHPStan (Static Analysis)
+      working-directory: modern-laravel
+      run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
+  docker-tests:
+    name: Docker Build Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Test Legacy Docker Build
+      working-directory: legacy-codeigniter-php5-4
+      run: docker-compose config
+    
+    - name: Test Modern Docker Build
+      working-directory: modern-laravel
+      run: docker-compose -f compose.yaml config

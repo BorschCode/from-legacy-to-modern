@@ -1,5 +1,14 @@
 # Legacy to Modern Migration Project
 
+[![CI](https://github.com/BorschCode/legacy-to-modern/workflows/CI/badge.svg)](https://github.com/BorschCode/legacy-to-modern/actions)
+[![CodeIgniter](https://img.shields.io/badge/CodeIgniter-3.x-red.svg)]()
+[![Laravel](https://img.shields.io/badge/Laravel-12-red.svg)]()
+[![PHP](https://img.shields.io/badge/PHP-5.6%20%7C%208.4-blue.svg)]()
+[![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)]()
+[![MySQL](https://img.shields.io/badge/MySQL-5.7%20%7C%208.0-orange?logo=mysql)]()
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-4-purple?logo=bootstrap)]()
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)]()
+
 This project documents the migration of a legacy CodeIgniter 3 (PHP 5.4) application to a modern Laravel 12 application running in a Dockerized environment.
 
 ## Table of Contents
