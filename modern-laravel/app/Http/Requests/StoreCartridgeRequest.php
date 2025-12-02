@@ -31,7 +31,7 @@ class StoreCartridgeRequest extends FormRequest
     public function validated($key = null, $default = null): array
     {
         $validated = parent::validated();
-        
+
         // Auto-calculate service status
         $validated['inservice'] = 0;
         if (isset($validated['date_outcome']) && isset($validated['date_income'])) {

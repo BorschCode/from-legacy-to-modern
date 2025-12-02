@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Cartridge $cartridge
  * @property-read int $weight_difference
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CartridgeHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CartridgeHistory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CartridgeHistory query()
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CartridgeHistory whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CartridgeHistory whereWeightAfter($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CartridgeHistory whereWeightBefore($value)
+ *
  * @mixin \Eloquent
  */
 class CartridgeHistory extends Model
